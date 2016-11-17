@@ -3,13 +3,7 @@ import matplotlib.pyplot as plt
 import sys
 import time
 
-newArray = []
-tempArray = []
-mergeResult = []
-quickResult = []
-radixResult = []
-
-
+# Merge used in merge sort, algorithm used is from the lecture slides
 def merge(array1, array2):
 	i, j = 0, 0
 	array3 = []
@@ -28,6 +22,7 @@ def merge(array1, array2):
 
 	return array3
 
+# Merge sort, algorithm used is from the lecture slides
 def mergesort(array):
 	length = len(array)
 	if length <= 1:
@@ -37,13 +32,14 @@ def mergesort(array):
 		array2 = mergesort(array[length/2:])
 		return merge(array1,array2)
 
+# Tail recursive quicksort, algorithm used is from the textbook
 def quicksort(array, p, r):
 	while p < r:
 		q = partition(array, p, r)
 		quicksort(array, p, q - 1)
 		p = q + 1
 
-
+# Partition used in quick sort, algorithm used is from the lecture slides
 def partition(array, p, r):
 	x = array[r]
 	i = p - 1
@@ -54,19 +50,23 @@ def partition(array, p, r):
 	array[i+1], array[r] = array[r], array[i+1]
 	return i+1
 
+# Gets current time in milliseconds
 def current_milli_time():
 	return int(round(time.time() * 1000))
 
+# changes string to a string binary 
 def stringToBin(array):
-	# return "{0:b}".format(num)
 	for x in range (len(array)):
 		array[x] = ' '.join(format(ord(i), 'b') for i in array[x])
 
+# changes a string binary to a string
 def binToString(array):
 	for x in range (len(array)):
 		stringsArray = array[x].split(' ')
 		array[x] = ''.join(chr(int(i, 2)) for i in stringsArray)
 
+# digit function used in counting sort, algorithm used is from the lecture slides,
+# the code is slightly modified that binary converstion is removed
 def digit(num, i):
 	x = num
 	if i >= len(x):
@@ -75,6 +75,7 @@ def digit(num, i):
 		d = x[-(i+1)]
 		return 0 if d == '0' else 1
 
+# counting sort used in radix sort, algorithm used is from the lecture slides
 def COUNTING_SORT(A, i):
 	n = len(A)
 	k = 2
@@ -95,6 +96,9 @@ def COUNTING_SORT(A, i):
 
 	return B
 
+# radix sort, algorithm used is from the lecture slides,
+# the code is slightly modified that the entire array is convert at the beginning and 
+# converted back at the end instead of converting during sorting
 def RADIX_SORT_STRING(A):
 	stringToBin(A)
 	n = max(len(x) for x in A)
@@ -103,19 +107,29 @@ def RADIX_SORT_STRING(A):
 	binToString(A)
 	return A
 
+# used to generate an array with 1000000 strings each 100 characters long
 def generateArray():
+	array = []
 	for i in range(1000000):
 		newString = ""
 		for j in range (100):
 			# newString += chr(random.randint(32,127))
 			newString += chr(random.randint(97,122))
-		newArray.append(newString)
+		array.append(newString)
 		sys.stdout.write("\r%i" % i)
 		sys.stdout.flush()
 	sys.stdout.write("\rdone generation\n")
+	return array
 
 def main():
-	generateArray()
+	tempArray = []
+	mergeResult = []
+	quickResult = []
+	radixResult = []
+
+	newArray = generateArray()
+	
+	# merge sort
 	for x in range (100):
 		currTime = current_milli_time()
 		mergeArray = mergesort(newArray)
@@ -123,6 +137,7 @@ def main():
 	print(mergeResult)
 	print('Done: merge sort')
 
+	# quick sort
 	for x in range (100):
 		tempArray = newArray[:]
 		currTime = current_milli_time()
@@ -131,6 +146,7 @@ def main():
 	print(quickResult)
 	print('Done: quick sort')
 
+	# radix sort
 	for x in range (100):
 		tempArray = newArray[:]
 		currTime = current_milli_time()
