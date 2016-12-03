@@ -37,12 +37,14 @@ def main():
 	# initialize the hashmap
 	hashMap = [[] for i in range(m)]
 
+
 	# fills map
 	for i in range(N):
 		x = random.randint(0, sys.maxint)
 		k = func(x, m)
 		hashMap[k].append(x)
 
+	print "Longest collision:", len(max(hashMap, key=len))
 	# x axis range
 	count = [len(hashMap[i]) for i in range(m)]
 
